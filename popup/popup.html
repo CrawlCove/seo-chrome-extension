@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Crawl Cove</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<header class="top">
+  <img src="../icons/icon-32.png" alt="" width="22" height="22">
+  <div class="brand">Crawl Cove</div>
+  <div class="host" id="host"></div>
+</header>
+
+<section id="state" class="state">Checking this page…</section>
+
+<main id="main" hidden>
+  <section class="card ai">
+    <div class="ai-head">
+      <div class="ring" id="ring"><span id="score">–</span></div>
+      <div>
+        <h2>AI answer visibility</h2>
+        <p class="sub" id="ai-summary"></p>
+      </div>
+    </div>
+    <ul class="signals" id="signals"></ul>
+    <div class="bots">
+      <div class="bots-head">
+        <span>AI search crawlers</span>
+        <span id="bots-count"></span>
+      </div>
+      <ul id="bots"></ul>
+      <button class="link" id="bots-more" type="button">Show user fetchers and training crawlers</button>
+      <ul id="bots-rest" hidden></ul>
+    </div>
+    <div class="flags" id="flags"></div>
+  </section>
+
+  <nav class="tabs">
+    <button data-tab="findings" class="on" type="button">Findings <span id="n-findings"></span></button>
+    <button data-tab="page" type="button">Page</button>
+    <button data-tab="export" type="button">Export</button>
+  </nav>
+
+  <section id="tab-findings" class="tab">
+    <ul class="findings" id="findings"></ul>
+  </section>
+
+  <section id="tab-page" class="tab" hidden>
+    <dl class="facts" id="facts"></dl>
+    <h3>Headings</h3>
+    <ol class="outline" id="outline"></ol>
+  </section>
+
+  <section id="tab-export" class="tab" hidden>
+    <p class="sub">Nothing leaves your browser. Copy or download the result for a ticket, a client note or a spreadsheet.</p>
+    <div class="actions">
+      <button id="copy-md" type="button">Copy Markdown report</button>
+      <button id="dl-json" type="button">Download JSON (export spec)</button>
+      <button id="copy-json" type="button">Copy JSON</button>
+    </div>
+    <p class="sub" id="copied"></p>
+  </section>
+
+  <footer class="cta">
+    <div>One page checked. The desktop app crawls the whole site, ranks every finding by impact and tracks AI visibility over time.</div>
+    <a id="cta-link" target="_blank" rel="noopener">Crawl the whole site with Crawl Cove</a>
+  </footer>
+</main>
+<script type="module" src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Crawl Cove SEO + AI Visibility Checker",
+  "short_name": "Crawl Cove",
+  "version": "1.0.0",
+  "description": "On-page SEO checker that also shows whether AI answer engines can read and quote the page: AI crawler access, snippet blocks, llms.txt, extractability.",
+  "minimum_chrome_version": "116",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "action": {
+    "default_title": "Check this page with Crawl Cove",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "homepage_url": "https://crawlcove.com/?utm_source=chrome&utm_medium=seo-chrome-extension"
+}

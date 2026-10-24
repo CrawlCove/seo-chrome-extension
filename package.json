@@ -1,0 +1,19 @@
+{
+  "name": "crawlcove-chrome-extension",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SEO Chrome extension with an AI visibility check: on-page SEO audit of the current tab plus which AI crawlers can read it, snippet blocks, llms.txt and an extractability score. Mirrors the Crawl Cove desktop crawler's checks.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "lint": "node --check background.js && node --check content/snapshot.js && node -e \"JSON.parse(require('fs').readFileSync('manifest.json','utf8'))\" && node --check popup/popup.js && for f in lib/*.js; do node --input-type=module -e \"import('./$f')\" || exit 1; done",
+    "pack": "rm -f dist/seo-chrome-extension.zip && mkdir -p dist && zip -r dist/seo-chrome-extension.zip manifest.json background.js content lib popup icons -x '*.DS_Store'",
+    "icons": "node scripts/icons.mjs"
+  },
+  "keywords": ["seo", "chrome-extension", "seo-extension", "ai-visibility", "geo", "aeo", "llms-txt", "ai-crawlers", "technical-seo", "crawl-cove"],
+  "author": "Crawl Cove",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/CrawlCove/seo-chrome-extension.git" },
+  "homepage": "https://crawlcove.com/?utm_source=github&utm_medium=seo-chrome-extension"
+}
