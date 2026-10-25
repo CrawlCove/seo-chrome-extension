@@ -1,6 +1,6 @@
 # SEO Chrome extension with an AI visibility check
 
-An open-source SEO Chrome extension that audits the page you are on and, unlike every other SEO extension, tells you whether AI answer engines can read and quote it: which AI crawlers robots.txt lets in, whether snippets are blocked from AI Overviews, whether the site has an llms.txt, and how extractable the page is for ChatGPT, Perplexity, Claude and Google AI Mode.
+An open-source SEO Chrome extension that audits the page you are on and also tells you whether AI answer engines can read and quote it: which AI crawlers robots.txt lets in, whether snippets are blocked from AI Overviews, whether the site has an llms.txt, and how extractable the page is for ChatGPT, Perplexity, Claude and Google AI Mode.
 
 The checks, their names and their severities are the ones the [Crawl Cove](https://crawlcove.com/?utm_source=github&utm_medium=seo-chrome-extension) desktop crawler uses, so the popup is a one-page preview of the full site audit.
 
@@ -8,7 +8,7 @@ The checks, their names and their severities are the ones the [Crawl Cove](https
 
 ## What it shows
 
-**AI answer visibility** (the part no other extension does)
+**AI answer visibility** (the part the big SEO toolbars do not check)
 
 - **Extractability score, 0 to 100**: can a model lift a self-contained answer from this page? Scored on answer-first structure, question-shaped sections, FAQ markup, a table in structured data, and article date + author in structured data. Same formula (1.0.0) as the desktop app.
 - **23 AI crawlers, allowed or blocked**, read from the site's robots.txt with the page's own path applied. Grouped by purpose, because the purposes differ: AI search crawlers (OAI-SearchBot, Claude-SearchBot, PerplexityBot…) decide whether you get cited; user fetchers (ChatGPT-User, Claude-User…) open a page when someone asks about it; training crawlers (GPTBot, ClaudeBot, Google-Extended…) are an opt-out choice, not a problem.
@@ -52,7 +52,7 @@ node tests/browser/smoke.mjs      # real Chromium: content script + probe + popu
 
 ## Works with Crawl Cove
 
-The extension checks one page. [Crawl Cove](https://crawlcove.com/?utm_source=github&utm_medium=seo-chrome-extension) crawls the whole site, ranks every finding by impact, tracks AI visibility over time and sits next to your Search Console data. Press "Crawl the whole site" in the popup to go there.
+The extension checks one page. [Crawl Cove](https://crawlcove.com/?utm_source=github&utm_medium=seo-chrome-extension) crawls the whole site, tracks AI visibility from one crawl to the next, and ranks findings by impact once Search Console is connected. Press "Crawl the whole site" in the popup to go there.
 
 ## Related tools
 

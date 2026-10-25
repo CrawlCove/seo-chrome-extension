@@ -14,9 +14,13 @@ Overviews cite this page?"
 1. **AI answer visibility, on the page you are looking at.** 23 named AI
    crawlers, allowed or blocked, graded by what each one is for. Snippet
    blocks that silently remove pages from AI Overviews. llms.txt. An
-   extractability score with the five signals spelled out. Nobody in the
-   Store does this today, so the first screenshot and the first sentence of
-   the listing are this, not "view meta tags".
+   extractability score with the five signals spelled out. None of the
+   best-known SEO toolbars checks this on the page you are on (checked 25 Oct
+   2026), so the first screenshot and the first sentence of the listing are
+   this, not "view meta tags". Small AI-only extensions do exist (SAGE,
+   RadarKit, Adobe AI Content Visibility Checker and about 15 more), so never
+   claim "the only" or "the first"; the defensible edge is both halves, AI and
+   on-page, in one panel under the desktop crawler's check ids.
 2. **Same checks as the desktop crawler.** The extension is a one-page
    preview under the same ids, names and severities. That makes the upsell
    literal: "this page has it, how many of your other pages do?" One button
@@ -36,7 +40,7 @@ Overviews cite this page?"
   "Can AI quote this page? Check in one click" post targeting
   "seo chrome extension" and "ai visibility checker chrome extension".
 - Product Hunt style launch is cheap here because the hook is one sentence:
-  "The first SEO extension that tells you whether AI can quote your page."
+  "An SEO extension that also tells you whether AI can quote your page."
 - Comparison section on the listing page: one table, us vs the five
   incumbents, rows = AI crawler access, snippet block detection, llms.txt,
   extractability, privacy, open source, price.
