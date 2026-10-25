@@ -37,24 +37,30 @@
 
   const VAGUE = new Set(['click here', 'here', 'read more', 'more', 'learn more', 'link', 'this', 'this page', 'continue', 'details'])
   const anchors = [...doc.querySelectorAll('a[href]')]
-  let internal = 0, external = 0, nofollowInternal = 0
+  let internal = 0, external = 0, nofollowInternal = 0, nofollowExternal = 0
   const vagueAnchors = []
   const internalHrefs = new Set()
+  const linkList = []
   for (const a of anchors) {
     const href = a.getAttribute('href') || ''
     if (/^(#|mailto:|tel:|javascript:)/i.test(href)) continue
     const url = abs(href)
     if (!url || !/^https?:/i.test(url)) continue
     const rel = (a.getAttribute('rel') || '').toLowerCase()
-    if (isInternal(url)) {
+    const nofollow = /\bnofollow\b/.test(rel)
+    const label = text(a) || (a.querySelector('img') ? `[image: ${a.querySelector('img').getAttribute('alt') || 'no alt'}]` : '')
+    const int = isInternal(url)
+    if (int) {
       internal++
       internalHrefs.add(url.split('#')[0])
-      if (/\bnofollow\b/.test(rel)) nofollowInternal++
-      const label = text(a).toLowerCase()
-      if (label && VAGUE.has(label) && vagueAnchors.length < 10) vagueAnchors.push({ text: label, href: url })
+      if (nofollow) nofollowInternal++
+      const low = label.toLowerCase()
+      if (low && VAGUE.has(low) && vagueAnchors.length < 10) vagueAnchors.push({ text: low, href: url })
     } else {
       external++
+      if (nofollow) nofollowExternal++
     }
+    if (linkList.length < 1500) linkList.push({ href: url, text: label.slice(0, 120), internal: int, rel: rel || '', target: a.getAttribute('target') || '' })
   }
 
   const imgs = [...doc.querySelectorAll('img')]
@@ -62,6 +68,15 @@
   const emptyAlt = imgs.filter((i) => i.hasAttribute('alt') && i.getAttribute('alt').trim() === '').length
   const firstImg = imgs.find((i) => (i.getAttribute('src') || i.getAttribute('data-src')) && !/^data:/.test(i.getAttribute('src') || ''))
   const firstImageLazy = !!firstImg && (firstImg.getAttribute('loading') || '').toLowerCase() === 'lazy'
+  const imageList = imgs.slice(0, 500).map((i) => ({
+    src: abs(i.currentSrc || i.getAttribute('src') || i.getAttribute('data-src') || '') || '',
+    alt: i.hasAttribute('alt') ? i.getAttribute('alt') : null,
+    width: i.naturalWidth || null,
+    height: i.naturalHeight || null,
+    displayWidth: i.clientWidth || null,
+    loading: (i.getAttribute('loading') || '').toLowerCase() || null,
+    sized: i.hasAttribute('width') && i.hasAttribute('height')
+  }))
 
   const jsonLd = [...doc.querySelectorAll('script[type="application/ld+json" i]')]
     .map((s) => (s.textContent || '').trim())
@@ -81,6 +96,40 @@
       if (/^http:\/\//i.test(v) && mixed.length < 20) mixed.push(v)
     }
   }
+
+  // Lab web vitals from the page's own performance timeline (buffered entries
+  // survive until the popup asks). Field data is what Google ranks on; these
+  // are the same metrics measured on this load, on this machine.
+  const perf = { ttfbMs: null, domContentLoadedMs: null, loadMs: null, transferBytes: null, resources: null, lcpMs: null, cls: null, domNodes: doc.getElementsByTagName('*').length }
+  try {
+    const nav = performance.getEntriesByType('navigation')[0]
+    if (nav) {
+      perf.ttfbMs = Math.round(nav.responseStart)
+      perf.domContentLoadedMs = Math.round(nav.domContentLoadedEventEnd)
+      perf.loadMs = Math.round(nav.loadEventEnd) || null
+      perf.transferBytes = nav.transferSize || null
+    }
+    const res = performance.getEntriesByType('resource')
+    perf.resources = res.length
+    perf.resourceBytes = res.reduce((a, r) => a + (r.transferSize || 0), 0) + (perf.transferBytes || 0)
+    // LCP and layout shifts come from the async probe (buffered observers).
+  } catch { /* some pages disable the timeline */ }
+
+  // Text for the focus-keyword check: body text (capped) and the first
+  // paragraph after the H1, so the popup can say where a keyword appears.
+  const bodyText = doc.body ? (doc.body.innerText || '').replace(/\s+/g, ' ').slice(0, 200000) : ''
+  const firstH1 = doc.querySelector('h1')
+  let firstParagraph = ''
+  if (firstH1) {
+    let n = firstH1
+    for (let i = 0; i < 40 && n; i++) {
+      n = n.nextElementSibling || (n.parentElement && n.parentElement !== doc.body ? n.parentElement.nextElementSibling : null)
+      if (!n) break
+      const p = n.matches('p') ? n : n.querySelector('p')
+      if (p && text(p).length > 40) { firstParagraph = text(p).slice(0, 600); break }
+    }
+  }
+  if (!firstParagraph) { const p = [...doc.querySelectorAll('p')].find((x) => text(x).length > 40); if (p) firstParagraph = text(p).slice(0, 600) }
 
   const canonicalEl = doc.querySelector('link[rel="canonical"]')
   const canonical = canonicalEl ? abs(canonicalEl.getAttribute('href') || '') : null
@@ -103,15 +152,26 @@
     headings,
     h1Count: h1s.length,
     wordCount,
-    links: { internal, external, nofollowInternal, uniqueInternal: internalHrefs.size, vagueAnchors },
-    images: { count: imgs.length, missingAlt, emptyAlt, firstImageLazy },
+    links: { internal, external, nofollowInternal, nofollowExternal, uniqueInternal: internalHrefs.size, vagueAnchors, list: linkList },
+    images: { count: imgs.length, missingAlt, emptyAlt, firstImageLazy, list: imageList },
+    perf,
+    bodyText,
+    firstParagraph,
     jsonLd,
     social: {
       ogTitle: prop('og:title'),
       ogDescription: prop('og:description'),
       ogImage: prop('og:image'),
-      twitterCard: meta('twitter:card')
+      twitterCard: meta('twitter:card'),
+      twitterTitle: meta('twitter:title'),
+      twitterDescription: meta('twitter:description'),
+      twitterImage: meta('twitter:image'),
+      ogType: prop('og:type'),
+      ogUrl: prop('og:url')
     },
+    favicon: (() => { const l = doc.querySelector('link[rel~="icon"]'); return l ? abs(l.getAttribute('href') || '') : null })(),
+    metaKeywords: meta('keywords'),
+    charset: doc.characterSet || null,
     hreflang,
     mixedContent: mixed,
     tableCount: doc.querySelectorAll('table').length,

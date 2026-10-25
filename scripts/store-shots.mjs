@@ -31,8 +31,8 @@ const SHOTS = [
   { file: '01-ai-visibility', url: 'https://crawlcove.com/', h: 'Can AI <em>quote</em> this page?', p: 'An extractability score and the five signals behind it, on the page you are looking at.', l: ['Same formula as the Crawl Cove desktop crawler', 'ChatGPT, Perplexity, Claude and AI Overviews read the same signals', 'One click, no account'] },
   { file: '02-ai-crawlers', url: 'https://crawlcove.com/', h: '<em>23 AI crawlers</em>, allowed or blocked', p: 'Read from the site\'s robots.txt with this page\'s path applied, grouped by what each crawler is for.', l: ['Search crawlers decide whether you get cited', 'User fetchers open a page when someone asks about it', 'Training crawlers are an opt-out, not a problem'], setup: async (f) => { await f.click('#bots-more'); await f.evaluate(() => document.querySelector('.bots').scrollIntoView()) } },
   { file: '03-findings', url: 'https://crawlcove.com/blog/seo-crawl-export-format', h: 'Findings under the <em>same names</em> as the full crawl', p: 'Every finding carries its evidence, a fix and the check id the desktop app uses, high to info.', l: ['8 AI visibility checks and 21 on-page checks', 'Snippet blocks in meta tags and X-Robots-Tag headers', 'Fix links into free tools and guides'], setup: async (f) => { await f.evaluate(() => document.querySelector('.tabs').scrollIntoView()) } },
-  { file: '04-page', url: 'https://crawlcove.com/tools/robots-txt-tester', h: 'The whole page <em>in one glance</em>', p: 'Title and description with lengths, canonical, robots from all three carriers, language, links, images, hreflang, schema types and the heading outline.', l: ['Status code and X-Robots-Tag from the live response', 'Word count from the rendered page', 'Heading outline with levels'], setup: async (f) => { await f.click('[data-tab="page"]'); await f.evaluate(() => document.querySelector('.tabs').scrollIntoView()) } },
-  { file: '05-export', url: 'https://crawlcove.com/tools/robots-txt-tester', h: 'Nothing leaves <em>your browser</em>', p: 'Copy a Markdown report for a ticket or a client note, or download JSON in the open Crawl Cove export format.', l: ['No analytics, no telemetry, no host permissions', 'Three same-origin requests: robots.txt, llms.txt, the page headers', 'Source code public on GitHub'], setup: async (f) => { await f.click('[data-tab="export"]'); await f.evaluate(() => document.querySelector('.tabs').scrollIntoView()) } }
+  { file: '04-keyword', url: 'https://crawlcove.com/tools/robots-txt-tester', h: 'Where does the <em>keyword</em> sit?', p: 'Type a focus keyword and see it scored on title, H1, meta description, opening paragraph, subheadings, URL and body, with density.', l: ['Stuffing warnings above 2%', 'The phrases the page repeats most, one click to test', 'Remembered per site'], setup: async (f) => { await f.click('[data-tab="keyword"]'); await f.fill('#kw', 'robots.txt tester'); await f.click('#kwform button'); await f.waitForSelector('.kwscore'); await f.evaluate(() => document.querySelector('.tabs').scrollIntoView()) } },
+  { file: '05-schema-tools', url: 'https://crawlcove.com/blog/seo-crawl-export-format', h: 'Schema, links, vitals, <em>highlights</em>', p: 'Every JSON-LD type with the properties Google wants and the missing ones named. Every link and image as CSV. LCP, CLS and TTFB from this load.', l: ['Highlight headings, nofollow and external links, images without alt', 'One click to PageSpeed Insights, Rich Results Test, Wayback', 'Nothing leaves your browser'], setup: async (f) => { await f.click('[data-tab="schema"]'); await f.evaluate(() => document.querySelector('.tabs').scrollIntoView()) } }
 ]
 
 const browser = await chromium.launch({ executablePath: process.env.PW_CHROMIUM })
@@ -43,6 +43,7 @@ try {
     await live.goto(url, { waitUntil: 'networkidle', timeout: 60000 })
     const snapshot = await live.evaluate(snapshotSrc)
     const site = await live.evaluate(`(${probeSrc})(${JSON.stringify(snapshot.url)})`)
+    if (site.perf) snapshot.perf = { ...snapshot.perf, ...site.perf }
     captured.set(url, { snapshot, site })
     console.log(`captured ${url}: ${snapshot.wordCount} words, robots ${site.robotsStatus}, llms ${site.llmsTxt?.status}, status ${site.statusCode}`)
   }
@@ -55,7 +56,7 @@ try {
       const ok = () => Promise.resolve()
       window.chrome = {
         tabs: { query: async () => [{ id: 1, url: d.snapshot.url }] },
-        storage: { session: { get: async () => ({}), set: ok } },
+        storage: { session: { get: async () => ({}), set: ok }, local: { get: async () => ({}), set: ok } },
         scripting: { executeScript: async ({ files }) => [{ result: files ? d.snapshot : d.site }] },
         action: { setBadgeText: ok, setBadgeBackgroundColor: ok, setBadgeTextColor: ok }
       }

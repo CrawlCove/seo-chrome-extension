@@ -4,10 +4,12 @@ Publishing needs a Chrome Web Store developer account (one-off $5 registration,
 Google account) and a human to upload `dist/seo-chrome-extension.zip` from
 `npm run pack`. Agents cannot create accounts or spend, so this is Bloo's step.
 
-**Name (45 chars max):** Crawl Cove SEO + AI Visibility Checker
+**Name (45 chars max):** Crawl Cove SEO Checker + AI Visibility
 
 **Summary (132 chars max):**
-On-page SEO check plus AI visibility: which AI crawlers can read the page, snippet blocks, llms.txt and an extractability score.
+On-page SEO checker with an AI visibility report: metas, headings, schema, links, vitals, keyword, which AI crawlers can read it.
+
+**Search terms the listing should carry (Store search matches name, summary and description):** seo checker, seo extension, on-page seo, meta tags, title tag, meta description, headings, schema markup, structured data, JSON-LD, canonical, robots, nofollow, broken links, web vitals, keyword density, AI overviews, AI visibility, llms.txt, GPTBot, ChatGPT, Perplexity.
 
 **Category:** Developer Tools (secondary: Productivity)
 
@@ -26,11 +28,29 @@ AI ANSWER VISIBILITY
   X-Robots-Tag header that silently remove the page from AI Overviews.
 - llms.txt present or missing.
 
-ON-PAGE SEO
-Title and description lengths, canonical, noindex, H1 and heading order,
-language and viewport, Open Graph, structured data validity, thin content,
-hreflang, mixed content, image alt, lazy-loaded hero image, nofollow and vague
-internal links. Every finding has the evidence and a how-to-fix link.
+ON-PAGE SEO CHECKER
+Title and description lengths with a Google search preview, canonical,
+noindex, H1 and heading order, language and viewport, Open Graph, structured
+data validity, thin content, hreflang, mixed content, image alt, lazy-loaded
+hero image, nofollow and vague internal links. Every finding has the evidence
+and a how-to-fix link.
+
+FOCUS KEYWORD
+Type a keyword and see where it sits: title, H1, meta description, opening
+paragraph, subheadings, URL and body, with density and stuffing warnings, plus
+the phrases the page repeats most.
+
+SCHEMA, LINKS, IMAGES, WEB VITALS
+Every JSON-LD type with the required and recommended properties Google lists
+and the missing ones named. Every link with text, rel and target, every image
+with alt and sizes, both as CSV. LCP, CLS, TTFB, page weight and DOM size
+from the load you are looking at.
+
+HIGHLIGHT AND JUMP
+Highlight headings, nofollow links, external links or images without alt on
+the page. One click to Google, PageSpeed Insights, Rich Results Test, the
+schema validator, the Wayback Machine, robots.txt, sitemap.xml and llms.txt.
+Keyboard shortcut Alt+Shift+C.
 
 EXPORT
 Copy a Markdown report for a ticket or client email, or download JSON in the

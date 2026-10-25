@@ -47,6 +47,23 @@ try {
   assert.deepEqual(snapshot.links.vagueAnchors.map((a) => a.text), ['click here'])
   assert.ok(snapshot.wordCount > 80 && snapshot.wordCount < 140, `wordCount ${snapshot.wordCount}`)
   assert.equal(snapshot.tableCount, 1)
+  assert.equal(snapshot.links.list.length, 4)
+  assert.equal(snapshot.images.list.length, 3)
+  assert.equal(snapshot.images.list[0].alt, null)
+  assert.ok(snapshot.perf.ttfbMs >= 0 && snapshot.perf.domNodes > 10, 'perf captured')
+
+  assert.match(snapshot.firstParagraph, /^Paste your robots.txt/)
+  assert.ok(snapshot.bodyText.includes('Robots.txt tester'))
+
+  // Highlights: the file defines the function, a second evaluate toggles it.
+  await page.evaluate(readFileSync(join(ROOT, 'content/highlight.js'), 'utf8') + '\nwindow.ccToggleHighlight = ccToggleHighlight')
+  const on = await page.evaluate(() => window.ccToggleHighlight('alt'))
+  assert.deepEqual(on, { kind: 'alt', on: true, count: 2 })
+  assert.equal(await page.evaluate(() => document.querySelectorAll('[data-cc-highlight="alt"]').length), 2)
+  const off = await page.evaluate(() => window.ccToggleHighlight('alt'))
+  assert.equal(off.on, false)
+  assert.equal(await page.evaluate(() => document.querySelectorAll('[data-cc-highlight]').length), 0)
+  assert.equal((await page.evaluate(() => window.ccToggleHighlight('headings'))).count, 4)
 
   // The same-origin probe, exactly as the popup injects it.
   const probeSrc = readFileSync(join(ROOT, 'popup/popup.js'), 'utf8').match(/async function probeSite[\s\S]*?\n}\n/)[0]
@@ -55,6 +72,9 @@ try {
   assert.equal(site.llmsTxt.status, 404)
   assert.equal(site.statusCode, 200)
   assert.equal(site.xRobotsTag, 'max-snippet:0')
+  console.log(`perf: lcp ${site.perf.lcpMs} cls ${site.perf.cls} ttfb ${snapshot.perf.ttfbMs}`)
+  assert.ok(typeof site.perf.lcpMs === 'number' && site.perf.lcpMs > 0, 'LCP captured by the probe')
+  snapshot.perf = { ...snapshot.perf, ...site.perf }
 
   const result = runChecks(snapshot, site)
   const ids = result.findings.map((x) => x.checkId)
@@ -70,7 +90,7 @@ try {
     const ok = () => Promise.resolve()
     window.chrome = {
       tabs: { query: async () => [{ id: 7, url: d.snapshot.url }] },
-      storage: { session: { get: async () => ({}), set: ok } },
+      storage: { session: { get: async () => ({}), set: ok }, local: { get: async () => ({}), set: ok } },
       scripting: { executeScript: async ({ files }) => [{ result: files ? d.snapshot : d.site }] },
       action: { setBadgeText: ok, setBadgeBackgroundColor: ok, setBadgeTextColor: ok }
     }
@@ -87,7 +107,32 @@ try {
   mkdirSync(join(ROOT, 'docs/screenshots'), { recursive: true })
   await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-findings.png'), fullPage: true })
   await popup.click('[data-tab="page"]')
+  assert.match(await popup.textContent('#serp .s-title'), /Robots.txt tester/)
+  assert.equal((await popup.$$('#vitals div')).length, 6)
   await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-page.png'), fullPage: true })
+  await popup.click('[data-tab="keyword"]')
+  await popup.fill('#kw', 'robots.txt tester')
+  await popup.click('#kwform button')
+  await popup.waitForSelector('.kwscore')
+  const kwScore = Number(await popup.textContent('.kwscore .ring span'))
+  assert.equal(kwScore, 50, `title + H1 + body: keyword score ${kwScore}`)
+  assert.ok((await popup.$$('#phrases li[data-p]')).length >= 1)
+  await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-keyword.png'), fullPage: true })
+  await popup.click('[data-tab="schema"]')
+  assert.match(await popup.textContent('#schema'), /Article/)
+  assert.match(await popup.textContent('#schema'), /Missing required/)
+  await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-schema.png'), fullPage: true })
+  await popup.click('[data-tab="links"]')
+  assert.equal((await popup.$$('#linklist li')).length, 4)
+  await popup.click('#linkfilters button[data-f="nofollow"]')
+  assert.equal((await popup.$$('#linklist li')).length, 1)
+  assert.equal((await popup.$$('#imagelist li')).length, 3)
+  await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-links.png'), fullPage: true })
+  await popup.click('[data-tab="tools"]')
+  assert.equal((await popup.$$('#quick-google li')).length, 11)
+  assert.equal((await popup.$$('#hl button')).length, 4)
+  await popup.screenshot({ path: join(ROOT, 'docs/screenshots/popup-tools.png'), fullPage: true })
+  assert.deepEqual(errors, [])
   console.log(`smoke ok: ${result.findings.length} findings, score ${result.ai.extractability.score}, ${snapshot.wordCount} words`)
 } finally {
   await browser.close()

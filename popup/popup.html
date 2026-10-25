@@ -36,9 +36,13 @@
     <div class="flags" id="flags"></div>
   </section>
 
-  <nav class="tabs">
+  <nav class="tabs" id="tabs">
     <button data-tab="findings" class="on" type="button">Findings <span id="n-findings"></span></button>
     <button data-tab="page" type="button">Page</button>
+    <button data-tab="keyword" type="button">Keyword</button>
+    <button data-tab="schema" type="button">Schema <span id="n-schema"></span></button>
+    <button data-tab="links" type="button">Links</button>
+    <button data-tab="tools" type="button">Tools</button>
     <button data-tab="export" type="button">Export</button>
   </nav>
 
@@ -47,9 +51,57 @@
   </section>
 
   <section id="tab-page" class="tab" hidden>
+    <h3>Search preview</h3>
+    <div class="serp" id="serp"></div>
+    <h3>Web vitals on this load</h3>
+    <div class="vitals" id="vitals"></div>
+    <h3>Facts</h3>
     <dl class="facts" id="facts"></dl>
-    <h3>Headings</h3>
+    <h3>Headings <button class="link small" id="copy-headings" type="button">copy</button></h3>
     <ol class="outline" id="outline"></ol>
+  </section>
+
+  <section id="tab-keyword" class="tab" hidden>
+    <form class="kwform" id="kwform">
+      <input id="kw" type="text" placeholder="Focus keyword, e.g. title tag checker" autocomplete="off" spellcheck="false">
+      <button type="submit">Check</button>
+    </form>
+    <div id="kwresult"></div>
+    <h3>What the page repeats</h3>
+    <p class="sub">The two and three word phrases this page uses most. If the keyword you want is not here, the page is not about it yet.</p>
+    <ul class="phrases" id="phrases"></ul>
+  </section>
+
+  <section id="tab-schema" class="tab" hidden>
+    <div id="schema"></div>
+  </section>
+
+  <section id="tab-links" class="tab" hidden>
+    <div class="filters" id="linkfilters">
+      <button data-f="all" class="on" type="button">All</button>
+      <button data-f="internal" type="button">Internal</button>
+      <button data-f="external" type="button">External</button>
+      <button data-f="nofollow" type="button">Nofollow</button>
+      <button class="link small" id="copy-links" type="button">copy CSV</button>
+    </div>
+    <ul class="linklist" id="linklist"></ul>
+    <h3>Images <button class="link small" id="copy-images" type="button">copy CSV</button></h3>
+    <ul class="linklist" id="imagelist"></ul>
+  </section>
+
+  <section id="tab-tools" class="tab" hidden>
+    <h3>Highlight on the page</h3>
+    <div class="hl" id="hl">
+      <button data-hl="headings" type="button">Headings</button>
+      <button data-hl="nofollow" type="button">Nofollow links</button>
+      <button data-hl="external" type="button">External links</button>
+      <button data-hl="alt" type="button">Images without alt</button>
+    </div>
+    <p class="sub" id="hlmsg"></p>
+    <h3>Check this URL elsewhere</h3>
+    <ul class="quick" id="quick-google"></ul>
+    <h3>Crawl Cove free tools</h3>
+    <ul class="quick" id="quick-cc"></ul>
   </section>
 
   <section id="tab-export" class="tab" hidden>
@@ -58,12 +110,14 @@
       <button id="copy-md" type="button">Copy Markdown report</button>
       <button id="dl-json" type="button">Download JSON (export spec)</button>
       <button id="copy-json" type="button">Copy JSON</button>
+      <button id="dl-links" type="button">Download links CSV</button>
+      <button id="dl-images" type="button">Download images CSV</button>
     </div>
     <p class="sub" id="copied"></p>
   </section>
 
   <footer class="cta">
-    <div>One page checked. The desktop app crawls the whole site and tracks AI visibility from one crawl to the next.</div>
+    <div>One page checked. The desktop app crawls the whole site, ranks every finding by impact and tracks AI visibility over time.</div>
     <a id="cta-link" target="_blank" rel="noopener">Crawl the whole site with Crawl Cove</a>
   </footer>
 </main>

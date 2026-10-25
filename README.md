@@ -6,6 +6,8 @@ The checks, their names and their severities are the ones the [Crawl Cove](https
 
 ![Findings tab](docs/screenshots/popup-findings.png)
 
+More: [Page](docs/screenshots/popup-page.png), [Keyword](docs/screenshots/popup-keyword.png), [Schema](docs/screenshots/popup-schema.png), [Links](docs/screenshots/popup-links.png), [Tools](docs/screenshots/popup-tools.png).
+
 ## What it shows
 
 **AI answer visibility** (the part the big SEO toolbars do not check)
@@ -21,7 +23,15 @@ The checks, their names and their severities are the ones the [Crawl Cove](https
 |---|---|
 | `ai-bot-access`, `ai-snippet-blocked`, `ai-llms-txt`, `ai-extractability`, `ai-answer-structure`, `ai-author-authority`, `ai-content-freshness`, `ai-entity-markup` | `title`, `title-length`, `meta-description`, `canonical`, `insecure-canonical`, `robots-noindex`, `heading-h1`, `heading-order`, `html-lang`, `viewport-missing`, `social-meta`, `structured-data-missing`, `schema-validity`, `thin-content`, `content-under-structured`, `hreflang`, `mixed-content`, `image-alt`, `lazy-loaded-first-image`, `nofollow-internal-link`, `non-descriptive-anchor-text` |
 
-**Page**: title and description with lengths, canonical, robots directives from all three carriers, status, language, word count, heading outline, link and image counts, hreflang, Open Graph, structured data types.
+**Page**: a Google search preview with cut-off warnings, lab web vitals from this load (LCP, CLS, TTFB, DOMContentLoaded, weight, DOM size), title and description with lengths, canonical, robots directives from all three carriers, status, language, word count, heading outline (copyable), link and image counts, hreflang, Open Graph, structured data types.
+
+**Keyword**: type a focus keyword and get a placement score: title (and how near the front), H1, meta description, opening paragraph, H2/H3, URL and body, with density and stuffing warnings. Below it, the two and three word phrases the page repeats most, so you can see what it is actually about before you decide what it should rank for.
+
+**Schema**: every JSON-LD node by type, with the required and recommended properties from Google's rich result documentation and the missing ones named. Rich Results Test is one click away.
+
+**Links**: every link with its text, internal or external, rel and target, filterable by nofollow; every image with alt, natural and displayed size, loading attribute and missing width/height. Copy or download either as CSV.
+
+**Tools**: highlight headings, nofollow links, external links or images without alt on the page itself. Open the current URL in Google, Bing, PageSpeed Insights, Rich Results Test, the schema.org validator, the Wayback Machine or the W3C validator; jump to robots.txt, sitemap.xml and llms.txt; or run one of the Crawl Cove free tools.
 
 **Export**: a Markdown report for a ticket or client note, or JSON whose page record follows the [Crawl Cove export spec](https://github.com/CrawlCove/seo-crawl-export-spec), so the [Sheets importer](https://github.com/CrawlCove/seo-audit-google-sheets), the [JS library](https://github.com/CrawlCove/seo-crawl-export-js) and the [MCP server](https://github.com/CrawlCove/seo-mcp-server) can read it.
 
@@ -31,7 +41,7 @@ Chrome Web Store listing: coming. Until then, from source:
 
 1. Clone or [download](https://github.com/CrawlCove/seo-chrome-extension/archive/refs/heads/main.zip) this repository.
 2. Open `chrome://extensions`, turn on **Developer mode**, press **Load unpacked** and pick the folder.
-3. Pin the icon. Open any page and press it.
+3. Pin the icon. Open any page and press it, or press Alt+Shift+C.
 
 There is no build step: the repository is the extension. Works in Chrome, Edge, Brave and other Chromium browsers (Manifest V3, Chrome 116+).
 
@@ -46,7 +56,7 @@ Nothing leaves your browser. The only requests are three same-origin fetches (ro
 - `lib/checks.js` runs every check against the page snapshot and the site probe, pure and testable in Node.
 
 ```sh
-npm test                          # 30 unit tests, node:test, no dependencies
+npm test                          # unit tests, node:test, no dependencies
 node tests/browser/smoke.mjs      # real Chromium: content script + probe + popup render (needs playwright)
 ```
 
