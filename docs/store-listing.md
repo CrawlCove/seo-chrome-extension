@@ -9,61 +9,36 @@ Google account) and a human to upload `dist/seo-chrome-extension.zip` from
 **Summary (132 chars max):**
 On-page SEO checker with an AI visibility report: metas, headings, schema, links, vitals, keyword, which AI crawlers can read it.
 
-**Search terms the listing should carry (Store search matches name, summary and description):** seo checker, seo extension, on-page seo, meta tags, title tag, meta description, headings, schema markup, structured data, JSON-LD, canonical, robots, nofollow, broken links, web vitals, keyword density, AI overviews, AI visibility, llms.txt, GPTBot, ChatGPT, Perplexity.
+**Keywords:** the Store rejected 1.1.0 on 11 Nov 2026 for keyword spam
+(Yellow Argon), quoting the list of tool names in the old description. Keep the
+description in sentences: no lists of brands, tools or search terms, and no AI
+product names.
 
 **Category:** Developer Tools (secondary: Productivity)
 
 **Description:**
 
-Every SEO extension shows you the title, the metas, the headings and the links.
-This one also tells you whether AI answer engines can read and quote the page.
+Check the page you are on for SEO problems, and see whether AI answer engines can read and quote it.
 
 AI ANSWER VISIBILITY
-- Extractability score, 0 to 100: can ChatGPT, Perplexity, Claude or Google AI
-  Mode lift a clean answer from this page?
-- 23 AI crawlers, allowed or blocked, read from robots.txt with this page's
-  path applied. Grouped by purpose so you know which blocks cost citations and
-  which are a deliberate training opt-out.
-- Snippet blocks (nosnippet, max-snippet:0) in the meta tags or the
-  X-Robots-Tag header that silently remove the page from AI Overviews.
-- llms.txt present or missing.
+The extractability score, from 0 to 100, estimates how cleanly an AI answer engine can lift an answer from the page. The extension reads the site's robots.txt for this exact path and shows which of 23 known AI crawlers are allowed or blocked, grouped by purpose, so you can tell a block that costs citations from a deliberate training opt-out. It also flags snippet controls that hide the page from AI summaries, and tells you whether the site has an llms.txt file.
 
-ON-PAGE SEO CHECKER
-Title and description lengths with a Google search preview, canonical,
-noindex, H1 and heading order, language and viewport, Open Graph, structured
-data validity, thin content, hreflang, mixed content, image alt, lazy-loaded
-hero image, nofollow and vague internal links. Every finding has the evidence
-and a how-to-fix link.
+ON-PAGE SEO CHECKS
+The checks cover the title and meta description with a search result preview, canonical and indexing tags, heading order, structured data, thin content, image alt text and internal links. Each finding shows the evidence from the page and links to how to fix it.
 
 FOCUS KEYWORD
-Type a keyword and see where it sits: title, H1, meta description, opening
-paragraph, subheadings, URL and body, with density and stuffing warnings, plus
-the phrases the page repeats most.
+Type a keyword to see where it appears on the page and whether it is overused.
 
-SCHEMA, LINKS, IMAGES, WEB VITALS
-Every JSON-LD type with the required and recommended properties Google lists
-and the missing ones named. Every link with text, rel and target, every image
-with alt and sizes, both as CSV. LCP, CLS, TTFB, page weight and DOM size
-from the load you are looking at.
+SCHEMA, LINKS, IMAGES AND SPEED
+See every structured data block with any missing required properties, export the page's links and images as CSV, and read load timings measured from the page you have open.
 
-HIGHLIGHT AND JUMP
-Highlight headings, nofollow links, external links or images without alt on
-the page. One click to Google, PageSpeed Insights, Rich Results Test, the
-schema validator, the Wayback Machine, robots.txt, sitemap.xml and llms.txt.
-Keyboard shortcut Alt+Shift+C.
-
-EXPORT
-Copy a Markdown report for a ticket or client email, or download JSON in the
-open Crawl Cove export format.
+HIGHLIGHT AND EXPORT
+Highlight elements on the page, open common testing tools for the current URL in one click, and copy a Markdown report or download JSON. Keyboard shortcut: Alt+Shift+C.
 
 PRIVATE BY DESIGN
-No account. No analytics. Nothing leaves your browser: the only requests are
-to the site you are already on (robots.txt, llms.txt, the page's headers).
-Open source: github.com/CrawlCove/seo-chrome-extension
+No account and no analytics. The extension only requests files from the site you are already viewing, and the source code is public on GitHub.
 
-The same checks, under the same names, as the Crawl Cove desktop crawler, so
-when one page looks wrong you can crawl the whole site and see every page that
-shares the problem.
+The checks use the same names as the Crawl Cove desktop crawler, so when one page has a problem you can crawl the whole site and find every page that shares it.
 
 **Permissions justification (Store form):**
 - activeTab: read the page you pressed the button on; no access to other tabs.
