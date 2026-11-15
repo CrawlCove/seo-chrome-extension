@@ -1,3 +1,5 @@
+<a href="https://crawlcove.com/download?utm_source=github&utm_medium=readme&utm_campaign=seo-chrome-extension"><img src="https://raw.githubusercontent.com/CrawlCove/.github/main/banners/seo-chrome-extension.svg" width="1200" alt="seo-chrome-extension: On-page SEO checker with an AI visibility report: which AI crawlers can read the page, snippet blocks, llms.txt and extractability. Nothing leaves the browser." /></a>
+
 # SEO Chrome extension with an AI visibility check
 
 An open-source SEO Chrome extension that audits the page you are on and also tells you whether AI answer engines can read and quote it: which AI crawlers robots.txt lets in, whether snippets are blocked from AI Overviews, whether the site has an llms.txt, and how extractable the page is for ChatGPT, Perplexity, Claude and Google AI Mode.
