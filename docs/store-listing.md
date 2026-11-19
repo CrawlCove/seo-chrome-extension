@@ -1,4 +1,7 @@
-# Chrome Web Store listing (draft for Bloo)
+# Chrome Web Store listing
+
+Live since November 2026 (v1.1.0): https://chromewebstore.google.com/detail/lleemdcfcdhifgmaphaakihomhiiojnd
+The copy below is what the listing was submitted with.
 
 Publishing needs a Chrome Web Store developer account (one-off $5 registration,
 Google account) and a human to upload `dist/seo-chrome-extension.zip` from

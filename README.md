@@ -39,13 +39,14 @@ More: [Page](docs/screenshots/popup-page.png), [Keyword](docs/screenshots/popup-
 
 ## Install
 
-Chrome Web Store listing: coming. Until then, from source:
+**[Add it from the Chrome Web Store](https://chromewebstore.google.com/detail/lleemdcfcdhifgmaphaakihomhiiojnd)**, then pin the icon. Open any page and press it, or press Alt+Shift+C. Works in Chrome, Edge, Brave and other Chromium browsers (Manifest V3, Chrome 116+).
+
+From source instead:
 
 1. Clone or [download](https://github.com/CrawlCove/seo-chrome-extension/archive/refs/heads/main.zip) this repository.
 2. Open `chrome://extensions`, turn on **Developer mode**, press **Load unpacked** and pick the folder.
-3. Pin the icon. Open any page and press it, or press Alt+Shift+C.
 
-There is no build step: the repository is the extension. Works in Chrome, Edge, Brave and other Chromium browsers (Manifest V3, Chrome 116+).
+There is no build step: the repository is the extension.
 
 ## Privacy
 
